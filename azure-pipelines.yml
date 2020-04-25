@@ -15,40 +15,38 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-# - Added by the tool
-#- script: dotnet build --configuration $(buildConfiguration)
-#  displayName: 'dotnet build $(buildConfiguration)'
--task: UseDotNet@2
-  displayname: 'Use .NET Core SDK 3.1.100'
-  inputs:
-    packageType: sdk
-    version: 3.1.100
 
--task: Npm@1
-  displayname: 'Run npm install'
-  inputs:
-    verbose: false
+  -task: UseDotNet@2
+    displayname: 'Use .NET Core SDK 3.1.100'
+    inputs:
+      packageType: sdk
+      version: 3.1.100
 
--script: './node_modules/.bin/node-sass Tailspin.SpaceGame.Web/wwwroot --output Tailspin.SpaceGame.Web/wwwroot'
-displayName: 'Compile Sass assets'
+  -task: Npm@1
+    displayname: 'Run npm install'
+    inputs:
+      verbose: false
 
--task: gulp@1
-  displayname: 'Run gulp tasks'
+  -script: './node_modules/.bin/node-sass Tailspin.SpaceGame.Web/wwwroot --output Tailspin.SpaceGame.Web/wwwroot'
+  displayName: 'Compile Sass assets'
 
-- script: 'echo "$(Build.DefinitionName), $(Build.BuildId), $(Build.BuildNumber)" > buildinfo.txt'
-  displayName: 'Write build info'
-  workingDirectory: Tailspin.SpaceGame.Web/wwwroot
+  -task: gulp@1
+    displayname: 'Run gulp tasks'
 
-- task: DotNetCoreCLI@2
-  displayName: 'Restore project dependencies'
-  inputs:
-    command: 'restore'
-    projects: '**/*.csproj'
+  - script: 'echo "$(Build.DefinitionName), $(Build.BuildId), $(Build.BuildNumber)" > buildinfo.txt'
+    displayName: 'Write build info'
+    workingDirectory: Tailspin.SpaceGame.Web/wwwroot
 
-- task: DotNetCoreCLI@2
-  displayName: 'Build the project - Release'
-  inputs:
-    command: 'build'
-    arguments: '--no-restore --configuration Release'
-    projects: '**/*.csproj'
+  - task: DotNetCoreCLI@2
+    displayName: 'Restore project dependencies'
+    inputs:
+      command: 'restore'
+      projects: '**/*.csproj'
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Build the project - Release'
+    inputs:
+      command: 'build'
+      arguments: '--no-restore --configuration Release'
+      projects: '**/*.csproj'
 
