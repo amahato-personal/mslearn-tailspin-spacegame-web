@@ -39,6 +39,7 @@ steps:
     projects: '**/*.csproj'
 
 - task: SonarCloudPrepare@1
+  displayName: 'Prepare SonarCloud analysis'
   inputs:
     SonarCloud: 'SonarCloud'
     organization: 'amahato-personal'
@@ -79,7 +80,7 @@ steps:
 
 - task: SonarCloudPublish@1
   displayName: 'Publish SonarCloud quality gate results'
-  
+
 - task: PublishCodeCoverageResults@1
   displayName: 'Publish code coverage report'
   inputs:
